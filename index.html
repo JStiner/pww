@@ -6,6 +6,7 @@
   <meta name="description" content="Pressure Washer Warehouse storefront proof of concept">
   <title>Pressure Washer Warehouse | POC</title>
   <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/location.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -31,10 +32,10 @@
         <span class="brand-copy"><strong>PRESSURE WASHER</strong><span>WAREHOUSE</span></span>
       </a>
 
-      <button class="location-card" type="button" onclick="location.href='./?view=contact'">
-        <span class="location-kicker">Your P&amp;W store</span>
-        <strong>Divernon, Illinois</strong>
-        <span>Sales · Service · Parts · Rentals</span>
+      <button class="location-card" id="shipping-location-control" type="button" aria-label="Set shipping ZIP code">
+        <span class="location-kicker">Shipping location</span>
+        <strong id="shipping-location-label">Set ZIP code</strong>
+        <span>Estimate shipping &amp; availability</span>
       </button>
 
       <form class="site-search" id="global-search" role="search">
@@ -109,5 +110,6 @@
 
   <script src="assets/js/inventory.js"></script>
   <script src="assets/js/site.js"></script>
+  <script src="assets/js/location.js"></script>
 </body>
 </html>
