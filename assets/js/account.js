@@ -5,9 +5,7 @@
   const zip = () => (localStorage.getItem('pww-shipping-zip') || '').trim();
 
   const accountLink = document.getElementById('customer-account-link');
-  if (accountLink) {
-    accountLink.innerHTML = '<span>Account</span><strong>Sign In / Register</strong>';
-  }
+  if (accountLink) accountLink.innerHTML = '<span>Account</span><strong>Sign In / Register</strong>';
 
   const accountBreadcrumb = '<div class="breadcrumb"><a href="./">Home</a> &nbsp;/&nbsp; Account</div>';
 
@@ -16,9 +14,7 @@
     app.innerHTML = `
       <div class="shell account-page">
         ${accountBreadcrumb}
-        <div class="account-header">
-          <div><h1>My P&amp;W Account</h1><p>Manage orders, addresses, shipping location and account details.</p></div>
-        </div>
+        <div class="account-header"><div><h1>My P&amp;W Account</h1><p>Manage orders, addresses, shipping location and account details.</p></div></div>
         <div class="account-auth-grid">
           <section class="account-panel">
             <h2>Sign In</h2>
@@ -47,14 +43,8 @@
         </div>
       </div>`;
 
-    document.getElementById('account-signin-form')?.addEventListener('submit', e => {
-      e.preventDefault();
-      alert('POC only: Supabase Auth will handle sign-in here.');
-    });
-    document.getElementById('account-register-form')?.addEventListener('submit', e => {
-      e.preventDefault();
-      alert('POC only: Supabase Auth will create the customer account here.');
-    });
+    document.getElementById('account-signin-form')?.addEventListener('submit', e => { e.preventDefault(); alert('POC only: Supabase Auth will handle sign-in here.'); });
+    document.getElementById('account-register-form')?.addEventListener('submit', e => { e.preventDefault(); alert('POC only: Supabase Auth will create the customer account here.'); });
     document.getElementById('preview-account')?.addEventListener('click', renderDashboard);
   }
 
@@ -68,28 +58,17 @@
         <div class="account-header"><div><h1>Welcome back</h1><p>Customer account dashboard preview.</p></div></div>
         <div class="account-dashboard">
           <nav class="account-sidebar" aria-label="Account sections">
-            <button class="active" type="button">Account Overview</button>
-            <button type="button">Orders</button>
-            <button type="button">Addresses</button>
-            <button type="button">Profile</button>
+            <button class="active" type="button">Account Overview</button><button type="button">Orders</button><button type="button">Addresses</button><button type="button">Profile</button>
           </nav>
-          <main class="account-main">
+          <div class="account-main">
             <section class="account-summary-grid">
               <article class="account-summary-card"><h2>Orders</h2><strong>0 current orders</strong><p>Online and synced QuickBooks order history can appear here later.</p><button type="button">View orders</button></article>
               <article class="account-summary-card"><h2>Shipping Location</h2><strong>${currentZip}</strong><p>Your saved ZIP can drive future shipping rates and delivery availability.</p><button type="button" data-set-shipping-zip>${currentZip === 'Not set' ? 'Set ZIP' : 'Change ZIP'}</button></article>
               <article class="account-summary-card"><h2>Saved Addresses</h2><strong>0 addresses</strong><p>Shipping and billing addresses will be stored in the customer profile.</p><button type="button">Manage addresses</button></article>
             </section>
-            <section class="account-section">
-              <div class="account-section-head"><h2>Recent Orders</h2></div>
-              <div class="account-section-body"><div class="account-empty">No POC orders are tied to an account yet. Future online orders can be synced back to QuickBooks and shown here.</div></div>
-            </section>
-            <section class="account-section">
-              <div class="account-section-head"><h2>Account Details</h2><button class="btn small outline" type="button">Edit</button></div>
-              <div class="account-section-body">
-                <dl class="account-detail-list"><dt>Name</dt><dd>Demo Customer</dd><dt>Email</dt><dd>customer@example.com</dd><dt>Phone</dt><dd>Not set</dd><dt>Preferred ZIP</dt><dd>${currentZip}</dd></dl>
-              </div>
-            </section>
-          </main>
+            <section class="account-section"><div class="account-section-head"><h2>Recent Orders</h2></div><div class="account-section-body"><div class="account-empty">No POC orders are tied to an account yet. Future online orders can be synced back to QuickBooks and shown here.</div></div></section>
+            <section class="account-section"><div class="account-section-head"><h2>Account Details</h2><button class="btn small outline" type="button">Edit</button></div><div class="account-section-body"><dl class="account-detail-list"><dt>Name</dt><dd>Demo Customer</dd><dt>Email</dt><dd>customer@example.com</dd><dt>Phone</dt><dd>Not set</dd><dt>Preferred ZIP</dt><dd>${currentZip}</dd></dl></div></section>
+          </div>
         </div>
       </div>`;
     document.getElementById('exit-account-preview')?.addEventListener('click', renderAuth);
@@ -105,9 +84,8 @@
     heading.insertAdjacentElement('afterend', prompt);
   }
 
-  if (view === 'account') {
-    renderAuth();
-  } else if (view === 'cart') {
+  if (view === 'account') renderAuth();
+  else if (view === 'cart') {
     const observer = new MutationObserver(addCartAccountPrompt);
     observer.observe(app, {childList:true,subtree:true});
     addCartAccountPrompt();
