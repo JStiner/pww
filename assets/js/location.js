@@ -25,6 +25,9 @@
     const label = document.getElementById('shipping-location-label');
     if (label) label.textContent = zip ? `Ship to ${zip}` : 'Set ZIP code';
 
+    const mobileLabel = document.getElementById('shipping-location-mobile-label');
+    if (mobileLabel) mobileLabel.textContent = zip ? `Ship to ${zip}` : 'Set shipping ZIP';
+
     document.querySelectorAll('[data-current-shipping-zip]').forEach(el => {
       el.textContent = zip || 'Not set';
     });
@@ -33,7 +36,8 @@
       const labelEl = row.querySelector('span');
       const valueEl = row.querySelector('strong');
       if (labelEl && valueEl && labelEl.textContent.trim() === 'Shipping / pickup') {
-        valueEl.textContent = shippingSummaryText(zip);
+        const nextText = shippingSummaryText(zip);
+        if (valueEl.textContent !== nextText) valueEl.textContent = nextText;
       }
     });
   };
@@ -124,7 +128,7 @@
   };
 
   document.addEventListener('click', e => {
-    if (e.target.closest('#shipping-location-control, [data-set-shipping-zip]')) {
+    if (e.target.closest('#shipping-location-control, #shipping-location-mobile, [data-set-shipping-zip]')) {
       e.preventDefault();
       openModal();
     }
@@ -133,7 +137,6 @@
   if (isCart) {
     const observer = new MutationObserver(() => {
       if (!document.querySelector('#app .cart-shipping-location')) ensureCartLocation();
-      updateLocationUI();
     });
     observer.observe(document.getElementById('app'), { childList: true, subtree: true });
   }
