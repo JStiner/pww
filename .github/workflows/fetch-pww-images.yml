@@ -1,0 +1,49 @@
+name: Fetch PWW POC images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fetch-pww-images.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download current PWW site imagery
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/img/inventory
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/050-1920w.jpg' -o assets/img/inventory/showroom.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/052-1920w.jpg' -o assets/img/inventory/air-compressors.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/053-1920w.jpg' -o assets/img/inventory/surface-cleaners.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/055-1920w.jpg' -o assets/img/inventory/portable-generators.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/063-1920w.jpg' -o assets/img/inventory/hot-water-washers.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/064-1920w.jpg' -o assets/img/inventory/pressure-washers.jpg
+          curl -L --fail --retry 3 'https://irp.cdn-website.com//a2f396c011224f74b50782821a251211/dms3rep/multi/opt/948-360w.jpg' -o assets/img/inventory/service-sign.jpg
+          curl -L --fail --retry 3 'https://lirp.cdn-website.com/a2f396c011224f74b50782821a251211/dms3rep/multi/opt/067-1920w.jpg' -o assets/img/inventory/stor-loc-black.jpg
+          curl -L --fail --retry 3 'https://lirp.cdn-website.com/a2f396c011224f74b50782821a251211/dms3rep/multi/opt/068-1920w.jpg' -o assets/img/inventory/stor-loc-color.jpg
+          cp assets/img/inventory/showroom.jpg assets/img/inventory/parts-accessories.jpg
+
+      - name: Commit imported images
+        shell: bash
+        run: |
+          if git diff --quiet -- assets/img/inventory && [ -n "$(git ls-files --others --exclude-standard assets/img/inventory)" ] ; then
+            :
+          fi
+          git add assets/img/inventory
+          if git diff --cached --quiet; then
+            echo 'No image changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Import PWW site imagery for storefront POC'
+          git push
